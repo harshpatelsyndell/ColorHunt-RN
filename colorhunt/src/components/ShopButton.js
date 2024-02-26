@@ -11,8 +11,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import logoBlack from "../assets/logoBlack.png";
-import splashh from "../assets/splashh.png";
+import logoBlack from "../../assets/logoBlack.png";
+import splashh from "../../assets/splashh.png";
 
 const ShopButton = ({
   position,
@@ -154,7 +154,7 @@ const ShopButton = ({
         </>
       )}
       <TouchableOpacity
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("HomeScreen")}
         style={{
           backgroundColor: `${btnbg}`,
           height: 49,

@@ -18,9 +18,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import spiralTop from "../assets/images/spiralTop.png";
-import splashh from "../assets/splashh.png";
-import spiralBottom from "../assets/images/spiralBottom.png";
+import spiralTop from "../../assets/images/spiralTop.png";
+import splashh from "../../assets/splashh.png";
+import spiralBottom from "../../assets/images/spiralBottom.png";
 
 export default function VerifyScreen() {
     const navigation = useNavigation();

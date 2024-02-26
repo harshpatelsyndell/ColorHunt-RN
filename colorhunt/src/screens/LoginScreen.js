@@ -22,10 +22,10 @@ import {
 } from "react-native-responsive-screen";
 import Svg, { Path } from "react-native-svg";
 // transform: [{ skewY: '-20deg' }]
-import Rectangle from "../assets/images/Rectangle.png";
-import spiralTop from "../assets/images/spiralTop.png";
-import splashh from "../assets/splashh.png";
-import spiralBottom from "../assets/images/spiralBottom.png";
+import Rectangle from "../../assets/images/Rectangle.png";
+import spiralTop from "../../assets/images/spiralTop.png";
+import splashh from "../../assets/splashh.png";
+import spiralBottom from "../../assets/images/spiralBottom.png";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -36,7 +36,7 @@ export default function LoginScreen() {
     if (phoneNumber.trim() !== "") {
       navigation.navigate("Verify");
     } else {
-      navigation.navigate("Home"); // Navigate to Home if phone number is not entered
+      navigation.navigate("HomeScreen"); // Navigate to Home if phone number is not entered
     }
   };
 
@@ -68,7 +68,7 @@ export default function LoginScreen() {
               position: "relative",
             }}
           >
-            <View style={{ paddingBottom: 50, marginTop: 110 }}>
+            <View style={{ paddingBottom: 50, marginTop: windowWidth > 500 ? 50 : 110 }}>
               <Text
                 style={[
                   styles.welText,
