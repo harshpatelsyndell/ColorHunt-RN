@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   ImageBackground,
@@ -14,6 +14,7 @@ import {
   Platform,
   Button,
   Pressable,
+  useWindowDimensions,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -29,6 +30,7 @@ import spiralBottom from "../assets/images/spiralBottom.png";
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const windowWidth = useWindowDimensions().width;
 
   const handleNavigation = () => {
     if (phoneNumber.trim() !== "") {
@@ -67,17 +69,31 @@ export default function LoginScreen() {
             }}
           >
             <View style={{ paddingBottom: 50, marginTop: 110 }}>
-              <Text style={styles.welText}>Welcome!</Text>
-              <Text style={styles.LoginText}>Please Login To Continue</Text>
+              <Text
+                style={[
+                  styles.welText,
+                  { fontSize: windowWidth > 500 ? 50 : 30 },
+                ]}
+              >
+                Welcome!
+              </Text>
+              <Text
+                style={[
+                  styles.LoginText,
+                  { fontSize: windowWidth > 500 ? 40 : 20 },
+                ]}
+              >
+                Please Login To Continue
+              </Text>
             </View>
             <Image
               source={spiralBottom}
               style={{
                 position: "absolute",
                 right: 0,
-                bottom: 0,
-                width: 232,
-                height: 232,
+                bottom: windowWidth > 500 ? -90 : 0,
+                width: windowWidth > 500 ? 350 : 232,
+                height: windowWidth > 500 ? 350 : 232,
               }}
             />
 
@@ -150,10 +166,7 @@ export default function LoginScreen() {
           paddingVertical: 10,
         }}
       >
-         <Pressable
-          style={styles.button}
-          onPress={handleNavigation}
-        >
+        <Pressable style={styles.button} onPress={handleNavigation}>
           <Text style={[styles.buttonText, { fontFamily: "Glory_700Bold" }]}>
             {phoneNumber.trim() !== "" ? "Next" : "Skip"}
           </Text>
@@ -170,13 +183,11 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   welText: {
     color: "#fff",
-    fontSize: 30,
     fontFamily: "Glory_700Bold",
     textAlign: "center",
   },
   LoginText: {
     color: "#fff",
-    fontSize: 20,
     fontFamily: "Glory_700Bold",
     textAlign: "center",
   },

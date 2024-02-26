@@ -7,6 +7,9 @@ import {
   Glory_800ExtraBold,
   Glory_500Medium,
 } from "@expo-google-fonts/glory";
+import {
+  Gotu_400Regular
+} from "@expo-google-fonts/gotu";
 import React from "react";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -27,6 +30,7 @@ export default function App() {
     Glory_600SemiBold,
     Glory_700Bold,
     Glory_800ExtraBold,
+    Gotu_400Regular
   });
 
   if (!fontsLoaded && !fontError) {
@@ -52,3 +56,15 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+
+
+
+
+
+// expo install expo-google-fonts
+// npx expo install expo-font @expo-google-fonts/glory 
+// npm install --save @expo-google-fonts/glory
+// npx expo install expo-font @expo-google-fonts/gotu 
+// npm install --save @expo-google-fonts/gotu
+// npm i react-native-responsive-screen 
