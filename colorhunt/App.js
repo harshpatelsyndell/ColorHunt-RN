@@ -9,7 +9,6 @@ import {
 } from "@expo-google-fonts/glory";
 import { Gotu_400Regular } from "@expo-google-fonts/gotu";
 import React from "react";
-import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";

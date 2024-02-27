@@ -7,7 +7,7 @@ import OrderHistory from "../Tabs/OrderHistory";
 import Cart from "../Tabs/Cart";
 import Notifications from "../Tabs/Notifications";
 import Profile from "../Tabs/Profile";
-import profile from "../../../assets/images/profile.png";
+import profileImage from "../../../assets/images/profile.png";
 import { useNavigation } from "@react-navigation/native";
 
 const HomeIcon = (
@@ -298,7 +298,7 @@ const BottomTabBar = ({ route }) => {
               if (route.name === "HomeWelcome") {
                 return {
                   // headerShown: false,
-                  title: '',
+                  title: "",
                   animationEnabled: true,
                   tabBarButton: (props) => <TabButton {...props} item={item} />,
                   headerLeft: () => {
@@ -312,7 +312,7 @@ const BottomTabBar = ({ route }) => {
                 };
               }
               return {
-                title: '',
+                title: "",
                 headerShown: false,
                 animationEnabled: true,
                 tabBarButton: (props) => <TabButton {...props} item={item} />,
@@ -330,13 +330,17 @@ const BurgerMenu = () => {
 };
 
 const ProfileIcon = () => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.profileIconContainer}>
+    <TouchableOpacity
+      style={styles.profileIconContainer}
+      onPress={() => navigation.navigate(Profile)}
+    >
       <Image
-        source={profile}
+        source={profileImage}
         style={{ width: 35, height: 35, borderRadius: 100 }}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -364,7 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  profileIconContainer:{
+  profileIconContainer: {
     marginHorizontal: 20,
-  }
+  },
 });
