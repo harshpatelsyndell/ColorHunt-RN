@@ -5,8 +5,8 @@ import OrderHistory from "./Tabs/OrderHistory";
 import Cart from "./Tabs/Cart";
 import Notifications from "./Tabs/Notifications";
 import Profile from "./Tabs/Profile";
-import Svg, { Path } from "react-native-svg";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Svg, { Path, Rect } from "react-native-svg";
+import { StyleSheet,  TouchableOpacity, View } from "react-native";
 
 const HomeIcon = (
   <Svg xmlns="http://www.w3.org/2000/svg" width={17} height={19} fill="none">
@@ -166,6 +166,8 @@ const profileIcon = (
   </Svg>
 );
 
+
+
 const TabArr = [
   {
     route: "Home",
@@ -201,6 +203,7 @@ const TabArr = [
     activeIcon: profileIcon,
     inActiveIcon: profileIconInactive,
     component: Profile,
+    tabHide: "true",
   },
 ];
 
@@ -232,7 +235,7 @@ const HomeScreen = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{
+      screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#fff",
         tabBarActiveBackgroundColor: "#fff",
@@ -244,8 +247,9 @@ const HomeScreen = () => {
           right: 16,
           left: 16,
           borderRadius: 20,
+          ...(["Profile", "Cart"].includes(route.name) && { display: "none" }),
         },
-      }}
+      })}
     >
       {/* <Tab.Screen
         name="Home"
@@ -265,9 +269,18 @@ const HomeScreen = () => {
             key={index}
             name={item.route}
             component={item.component}
-            options={{
-              tabBarShowLabel: "beside-icon",
-              tabBarButton: (props) => <TabButton {...props} item={item} />,
+            options={({ route }) => {
+              if (route.name === 'Home') {
+                return {
+                  headerShown: false,
+                  animationEnabled: true,
+                  tabBarButton: (props) => <TabButton {...props} item={item} />,
+                }
+              }
+              return {
+                animationEnabled: true,
+                tabBarButton: (props) => <TabButton {...props} item={item} />,
+              }
             }}
           />
         );
@@ -275,6 +288,9 @@ const HomeScreen = () => {
     </Tab.Navigator>
   );
 };
+
+
+
 
 export default HomeScreen;
 
@@ -292,3 +308,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
+
+
+
+
