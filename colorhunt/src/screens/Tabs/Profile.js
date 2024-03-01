@@ -1,9 +1,20 @@
-import React from "react";
-import { Text, View, Image, Pressable, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  Image,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
 import Svg, { Path } from "react-native-svg";
 import profile2 from "../../../assets/images/profile2.png";
 import { useNavigation } from "@react-navigation/native";
-import Animated, { SlideInUp, SlideInDown } from "react-native-reanimated";
+import * as ImagePicker from "expo-image-picker";
+// import Animated, { SlideInUp, SlideInDown } from "react-native-reanimated";
 // import LoginScreen from "../LoginScreen";
 
 const editProfileIcon = (
@@ -22,58 +33,188 @@ const editProfileIcon = (
 );
 
 const Profile = () => {
+  const [name, setName] = useState("Harsh");
+  const [address, setAddress] = useState(
+    "Lorem ipsum, dolor sit amet consectetur, Nunc fringilla elit consectetur ligula feugiat"
+  );
+  const [number, setNumber] = useState("9090909090");
+  const [image, setImage] = useState(null);
+
   const navigation = useNavigation();
   const handleLogout = () => {
     navigation.popToTop();
   };
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
-    <Animated.View
-      entering={SlideInUp}
-      exiting={SlideInDown}
+    <KeyboardAvoidingView
       style={{ flex: 1 }}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View
-        style={{
-          backgroundColor: "#212121",
-          height: "30%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        // entering={SlideInUp}
+        // exiting={SlideInDown}
+        style={{ flex: 1 }}
       >
-        <View style={{ position: "relative" }}>
-          <Image source={profile2} style={{ width: 100, height: 100 }} />
+        <ScrollView style={{ flex: 1 }}>
           <View
             style={{
-              backgroundColor: "white",
-              width: 30,
-              height: 30,
+              backgroundColor: "#212121",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 5,
-              position: "absolute",
-              bottom: 0,
-              right: 0,
+              padding: 40,
             }}
           >
-            <Text>{editProfileIcon}</Text>
+            <View style={{ position: "relative" }}>
+              {image ? (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100 }}
+                />
+              ) : (
+                <Image source={profile2} style={{ width: 100, height: 100 }} />
+              )}
+              <View
+                style={{
+                  backgroundColor: "white",
+                  width: 30,
+                  height: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 5,
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                }}
+              >
+                <Text onPress={pickImage}>{editProfileIcon}</Text>
+              </View>
+            </View>
+            <Text
+              style={{
+                fontFamily: "Glory_700Bold",
+                fontSize: 18,
+                color: "white",
+                marginTop: 10,
+              }}
+            >
+              Upload Image
+            </Text>
           </View>
-        </View>
-        <Text
-          style={{
-            fontFamily: "Glory_700Bold",
-            fontSize: 18,
-            color: "white",
-            marginTop: 10,
-          }}
-        >
-          Upload Image
-        </Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <Text>Profile detail</Text>
-        </View>
+          <View style={{ flex: 1, margin: 20 }}>
+            <View>
+              <TextInput
+                placeholder="Name"
+                style={{
+                  borderBottomWidth: 1,
+                  fontFamily: "Glory_600SemiBold",
+                  fontSize: 18,
+                  color: "#00000080",
+                }}
+                value={name}
+                onChangeText={setName}
+              />
+              <TextInput
+                placeholder="Address"
+                multiline={true}
+                numberOfLines={2}
+                style={{
+                  borderBottomWidth: 1,
+                  fontFamily: "Glory_600SemiBold",
+                  fontSize: 18,
+                  marginVertical: 30,
+                  color: "#00000080",
+                }}
+                value={address}
+                onChangeText={setAddress}
+              />
+              <TextInput
+                placeholder="Number"
+                keyboardType="numeric"
+                style={{
+                  borderBottomWidth: 1,
+                  fontFamily: "Glory_600SemiBold",
+                  fontSize: 18,
+                  color: "#00000080",
+                }}
+                value={number}
+                onChangeText={setNumber}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginVertical: 30,
+                  justifyContent: "space-between",
+                }}
+              >
+                <TextInput
+                  placeholder="City"
+                  style={{
+                    borderBottomWidth: 1,
+                    fontFamily: "Glory_600SemiBold",
+                    fontSize: 18,
+                    color: "#00000080",
+                    width: "45%",
+                  }}
+                />
+                <TextInput
+                  placeholder="State"
+                  style={{
+                    borderBottomWidth: 1,
+                    fontFamily: "Glory_600SemiBold",
+                    fontSize: 18,
+                    color: "#00000080",
+                    width: "45%",
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <TextInput
+                  placeholder="Country"
+                  style={{
+                    borderBottomWidth: 1,
+                    fontFamily: "Glory_600SemiBold",
+                    fontSize: 18,
+                    color: "#00000080",
+                    width: "45%",
+                  }}
+                />
+                <TextInput
+                  placeholder="Pincode"
+                  maxLength={6}
+                  keyboardType="numeric"
+                  style={{
+                    borderBottomWidth: 1,
+                    fontFamily: "Glory_600SemiBold",
+                    fontSize: 18,
+                    color: "#00000080",
+                    width: "45%",
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
         <View>
           <Pressable style={styles.button} onPress={handleLogout}>
             <Text style={[styles.buttonText, { fontFamily: "Glory_700Bold" }]}>
@@ -82,7 +223,7 @@ const Profile = () => {
           </Pressable>
         </View>
       </View>
-    </Animated.View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -96,7 +237,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "#212121",
     marginHorizontal: "5%",
-    marginBottom: "5%",
+    marginVertical: "3%",
   },
   buttonText: {
     fontSize: 23,

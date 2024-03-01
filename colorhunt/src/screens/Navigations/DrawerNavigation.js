@@ -214,6 +214,15 @@ function CustomDrawerContent(props) {
   const handleWishlistPress = () => {
     navigation.navigate("Wishlist");
   };
+  const handleNotifications = () => {
+    navigation.navigate("Notifications");
+  };
+  const handleCart = () => {
+    navigation.navigate("Cart");
+  };
+  const handleOrderHistory = () => {
+    navigation.navigate("OrderHistory");
+  };
 
   const handleLogout = () => {
     navigation.navigate("Login"); // Navigate to the LoginScreen
@@ -264,9 +273,27 @@ function CustomDrawerContent(props) {
         </View>
         <DrawerItemList {...props} />
         <DrawerItem
+          label="OrderHistory"
+          onPress={handleOrderHistory}
+          icon={() => orderhistory}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <DrawerItem
+          label="Cart"
+          onPress={handleCart}
+          icon={() => cartIcon}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <DrawerItem
           label="Wishlist"
           onPress={handleWishlistPress}
           icon={() => wishlistIcon}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <DrawerItem
+          label="Notifications"
+          onPress={handleNotifications}
+          icon={() => notificationIcon}
           labelStyle={styles.drawerItemLabel}
         />
         <DrawerItem
@@ -281,6 +308,7 @@ function CustomDrawerContent(props) {
           icon={() => contactUsIcon}
           labelStyle={styles.drawerItemLabel}
         />
+
         <View style={{ marginTop: 20 }}>
           <DrawerItem
             label="Logout"
@@ -332,7 +360,7 @@ const DrawerNavigation = () => {
           drawerItemStyle: { display: "none" },
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="DrawerOrderHistory"
         initialParams={{ params: "OrderHistory" }}
         component={BottomTabBar}
@@ -341,8 +369,8 @@ const DrawerNavigation = () => {
           drawerIcon: () => orderhistory,
           drawerLabel: "Order History",
         }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="DrawerCart"
         initialParams={{ params: "Cart" }}
         component={BottomTabBar}
@@ -351,7 +379,7 @@ const DrawerNavigation = () => {
           drawerIcon: () => cartIcon,
           drawerLabel: "Cart",
         }}
-      />
+      /> */}
       {/* <Drawer.Screen
         name="DrawerWishlist"
         initialParams={{ params: "Wishlist" }}
@@ -362,7 +390,7 @@ const DrawerNavigation = () => {
           drawerLabel: "Wishlist",
         }}
       /> */}
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="DrawerNotifications"
         initialParams={{ params: "Notifications" }}
         component={BottomTabBar}
@@ -371,7 +399,7 @@ const DrawerNavigation = () => {
           drawerIcon: () => notificationIcon,
           drawerLabel: "Notifications",
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

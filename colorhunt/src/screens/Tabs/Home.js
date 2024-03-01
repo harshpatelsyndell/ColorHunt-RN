@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "react-native-gesture-handler";
 import {
-  FlatList,
-  KeyboardAvoidingView,
   StyleSheet,
   Text,
   Image,
@@ -10,14 +8,21 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Modal,
 } from "react-native";
-import Svg, { Path, Circle } from "react-native-svg";
+import Svg, { Path, Circle, Rect } from "react-native-svg";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { KidsSection, mensSection } from "./Constants";
 // import tshirt1 from "../../../assets/images/tshirt/tshirt1.png";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Mens from "./Mens";
+import { ProfileIcon } from "../../components/ProfileIcon";
+import { useNavigation } from "@react-navigation/native";
+
+const Stack = createNativeStackNavigator();
 
 const filterIcon = (
   <Svg
@@ -74,181 +79,343 @@ const searchIcon = (
   </Svg>
 );
 
-const renderItem = ({ item }) => {
+const backButtonLight = (
+  <Svg
+    width="23"
+    height="15"
+    viewBox="0 0 23 15"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12.7917 7.59103V7.16622C12.7797 5.48142 12.6837 3.9778 12.5037 3.025C12.5037 3.007 12.3117 2.06261 12.1917 1.74821C11.9997 1.29341 11.6516 0.907007 11.2196 0.662207C10.8716 0.488207 10.5115 0.399414 10.1275 0.399414C9.82754 0.413814 9.3356 0.563819 8.9876 0.689819L8.6876 0.802612C6.7556 1.57301 3.04758 4.0918 1.61958 5.6314L1.51162 5.73943L1.05562 6.24341C0.755615 6.62861 0.599609 7.10141 0.599609 7.60901C0.599609 8.06381 0.74358 8.5186 1.01958 8.8858C1.10358 9.0046 1.23562 9.15702 1.35562 9.28662L1.81162 9.76303C3.37162 11.3482 6.75558 13.573 8.51958 14.3098C8.51958 14.3266 9.61154 14.7826 10.1275 14.7994H10.1996C10.9916 14.7994 11.7356 14.3446 12.1196 13.6102C12.2276 13.4086 12.3236 13.015 12.4076 12.6694L12.5396 12.0166C12.6956 10.9678 12.7917 9.35743 12.7917 7.59103ZM20.3996 9.42102C21.3956 9.42102 22.1996 8.60622 22.1996 7.59941C22.1996 6.59381 21.3956 5.77902 20.3996 5.77902L15.9597 6.17141C15.1797 6.17141 14.5436 6.80981 14.5436 7.59941C14.5436 8.38902 15.1797 9.02863 15.9597 9.02863L20.3996 9.42102Z"
+      fill="white"
+    />
+  </Svg>
+);
+
+const cancelIcon = (
+  <Svg
+    width="14"
+    height="14"
+    viewBox="0 0 14 14"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      d="M12.7666 12.668L1.09934 1.00071"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+    <Path
+      d="M12.7666 1L1.09934 12.6673"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+  </Svg>
+);
+
+const Home1 = ({ navigation }) => {
+  const [filterModel, setFilterModel] = useState(false);
+  const closeBottomSheet = () => {
+    setFilterModel(false);
+  };
+  const openBottomSheet = () => {
+    setFilterModel(true);
+  };
   return (
-    <TouchableOpacity style={{ alignItems: "center", marginTop: 17 }}>
-      <View style={{ width: 155, height: 170, borderRadius: 10 }}>
-        <Image
-          source={item.imageurl}
-          resizeMode="cover"
-          style={{ width: 155, height: 170, borderRadius: 10 }}
-        />
-      </View>
-      <Text
-        style={{ marginTop: 20, fontFamily: "Glory_700Bold", fontSize: 20 }}
-      >
-        {item.category}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-const renderItemKids = ({ item }) => {
-  return (
-    <TouchableOpacity style={{ alignItems: "center", marginTop: 17 }}>
-      <View style={{ width: 155, height: 170, borderRadius: 10 }}>
-        <Image
-          source={item.imageurl}
-          resizeMode="cover"
-          style={{ width: 155, height: 170, borderRadius: 10 }}
-        />
-      </View>
-      <View style={{ marginTop: 5 }}>
-        <Text
-          style={{
-            fontFamily: "Glory_400Regular",
-            fontSize: 14,
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          {item.type}
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ScrollView style={{ flex: 1 }}>
+        <Text style={{ margin: 20, fontFamily: "Glory_700Bold", fontSize: 25 }}>
+          Welcome...
         </Text>
-        <Text
-          style={{
-            fontFamily: "Glory_400Regular",
-            fontSize: 14,
-            textAlign: "center",
-            fontWeight: "normal",
-          }}
+        <View style={styles.serachArea}>
+          <View style={{ width: wp("80%"), position: "relative" }}>
+            <View
+              style={{
+                position: "absolute",
+                zIndex: 2,
+                justifyContent: "center",
+                height: 40,
+                left: 20,
+              }}
+            >
+              {searchIcon}
+            </View>
+            <TextInput
+              placeholder="Search"
+              style={{
+                backgroundColor: "gray",
+                marginRight: 15,
+                backgroundColor: "#F1F1F1",
+                height: 40,
+                borderRadius: 30,
+                paddingLeft: 50,
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            style={{
+              width: wp("10%"),
+            }}
+            onPress={openBottomSheet}
+          >
+            {filterIcon}
+          </TouchableOpacity>
+        </View>
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={filterModel}
+          onRequestClose={closeBottomSheet}
         >
-          $ {item.price}
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Glory_400Regular",
-            fontSize: 14,
-            textAlign: "center",
-            fontWeight: "bold",
-          }}
-        >
-          T-Shirt
-        </Text>
-      </View>
-    </TouchableOpacity>
+          <View style={styles.filterModalContainer}>
+            <View style={styles.filterModal}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontFamily: "Glory_700Bold", fontSize: 24 }}>
+                  Category
+                </Text>
+                <TouchableOpacity onPress={closeBottomSheet}>
+                  <View
+                    style={{
+                      backgroundColor: "#212121",
+                      color: "white",
+                      width: 32,
+                      height: 32,
+                      borderRadius: 100,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {cancelIcon}
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <Text>range</Text>
+            </View>
+          </View>
+        </Modal>
+        {/* mensSection    */}
+        <View style={{ marginTop: 25, marginHorizontal: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
+          >
+            <View>
+              <Text style={{ fontFamily: "Glory_700Bold", fontSize: 18 }}>
+                Men's
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
+                View all
+              </Text>
+            </View>
+          </View>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {mensSection.map((item) => (
+              <TouchableOpacity
+                key={item.category}
+                style={{ alignItems: "center", marginTop: 17, marginRight: 15 }}
+                onPress={() =>
+                  navigation.navigate("mens", { category: item.category })
+                }
+              >
+                <View style={{ width: 155, height: 170, borderRadius: 10 }}>
+                  <Image
+                    source={item.imageurl}
+                    resizeMode="cover"
+                    style={{ width: 155, height: 170, borderRadius: 10 }}
+                  />
+                </View>
+                <Text
+                  style={{
+                    marginTop: 20,
+                    fontFamily: "Glory_700Bold",
+                    fontSize: 20,
+                  }}
+                >
+                  {item.category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+        {/* kids section  */}
+        <View style={{ marginTop: 25, marginHorizontal: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
+          >
+            <View>
+              <Text style={{ fontFamily: "Glory_700Bold", fontSize: 18 }}>
+                Kid's
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
+                View all
+              </Text>
+            </View>
+          </View>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {KidsSection[0].articles.map((item) => (
+              <TouchableOpacity
+                key={item.articleNo}
+                style={{ alignItems: "center", marginTop: 17, marginRight: 15 }}
+              >
+                <View style={{ width: 155, height: 170, borderRadius: 10 }}>
+                  <Image
+                    source={item.imageurl}
+                    resizeMode="cover"
+                    style={{ width: 155, height: 170, borderRadius: 10 }}
+                  />
+                </View>
+                <View style={{ marginTop: 5 }}>
+                  <Text
+                    style={{
+                      fontFamily: "Glory_400Regular",
+                      fontSize: 14,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.type}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "Glory_400Regular",
+                      fontSize: 14,
+                      textAlign: "center",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    $ {item.price}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "Glory_400Regular",
+                      fontSize: 14,
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    T-Shirt
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
+const burgerMenuIcon = (
+  <Svg
+    width="18"
+    height="18"
+    viewBox="0 0 18 12"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Rect
+      y="5.14258"
+      width="17.1429"
+      height="1.71429"
+      rx="0.857143"
+      fill="white"
+    />
+    <Rect
+      y="10.2852"
+      width="10.2857"
+      height="1.71429"
+      rx="0.857143"
+      fill="white"
+    />
+    <Rect
+      x="6.85742"
+      width="10.2857"
+      height="1.71429"
+      rx="0.857143"
+      fill="white"
+    />
+  </Svg>
+);
+
 const Home = () => {
+  const navigation = useNavigation();
+  // const headerStyle = filterModel ? { backgroundColor: "rgba(0,0,0,0.5)" } : {};
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* <ScrollView style={{ flex: 1 }}> */}
-      <Text style={{ margin: 20, fontFamily: "Glory_700Bold", fontSize: 25 }}>
-        Welcome...
-      </Text>
-      <View style={styles.serachArea}>
-        <View style={{ width: wp("80%"), position: "relative" }}>
-          <View
-            style={{
-              position: "absolute",
-              zIndex: 2,
-              justifyContent: "center",
-              height: 40,
-              left: 20,
-            }}
-          >
-            {searchIcon}
-          </View>
-          <TextInput
-            placeholder="Search"
-            style={{
-              backgroundColor: "gray",
-              marginRight: 15,
-              backgroundColor: "#F1F1F1",
-              height: 40,
-              borderRadius: 30,
-              paddingLeft: 50,
-            }}
-          />
-        </View>
-        <View
-          style={{
-            width: wp("10%"),
-          }}
-        >
-          {filterIcon}
-        </View>
-      </View>
-      {/* mensSection    */}
-      <View style={{ marginTop: 25, marginHorizontal: 20 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-          }}
-        >
-          <View>
-            <Text style={{ fontFamily: "Glory_700Bold", fontSize: 18 }}>
-              Men's
-            </Text>
-          </View>
-          <View>
-            <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
-              View all
-            </Text>
-          </View>
-        </View>
-        <View>
-          <FlatList
-            data={mensSection}
-            renderItem={renderItem}
-            horizontal
-            ItemSeparatorComponent={<View style={{ width: 15 }} />}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
-      </View>
-      {/* kids section  */}
-      <View style={{ marginTop: 25, marginHorizontal: 20 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-          }}
-        >
-          <View>
-            <Text style={{ fontFamily: "Glory_700Bold", fontSize: 18 }}>
-              Kid's
-            </Text>
-          </View>
-          <View>
-            <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
-              View all
-            </Text>
-          </View>
-        </View>
-        <View>
-          <FlatList
-            data={KidsSection}
-            // renderItem={renderItemKids}
-            renderItem={({ item }) => {
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home1"
+        component={Home1}
+        // options={{ headerShown: false }}
+        options={({ route }) => {
+          return {
+            // headerShown: false,
+            title: "",
+            headerShadowVisible: false,
+            animationEnabled: true,
+            tabBarButton: (props) => <TabButton {...props} item={item} />,
+            headerLeft: () => {
               return (
-                <FlatList
-                  data={item.articles}
-                  renderItem={renderItemKids}
-                  ItemSeparatorComponent={<View style={{ width: 15 }} />}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                />
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                  <BurgerMenu />
+                </TouchableOpacity>
               );
-            }}
-          />
-        </View>
-      </View>
-      {/* </ScrollView> */}
+            },
+            headerRight: () => <ProfileIcon />,
+            // headerStyle: headerStyle,
+          };
+        }}
+      />
+      <Stack.Screen
+        name="mens"
+        component={Mens}
+        options={{
+          title: "",
+          headerShadowVisible: false,
+          headerRight: () => <ProfileIcon />,
+          headerLeft: () => {
+            return (
+              <TouchableOpacity onPress={() => navigation.navigate("Home1")}>
+                <BackMenuDark />
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const BurgerMenu = () => {
+  return <View style={styles.burgerMenuContainer}>{burgerMenuIcon}</View>;
+};
+
+const BackMenuDark = () => {
+  return (
+    <View style={[styles.backMenuContainer, { backgroundColor: "#212121" }]}>
+      {backButtonLight}
     </View>
   );
 };
@@ -259,6 +426,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginHorizontal: 20,
+  },
+  backMenuContainer: {
+    width: 35,
+    height: 35,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  burgerMenuContainer: {
+    width: 35,
+    height: 35,
+    backgroundColor: "#212121",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 5,
+  },
+  filterModalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    paddingHorizontal: 20,
+  },
+  filterModal: {
+    backgroundColor: "white",
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: "100%",
+    // alignItems: "center",
   },
 });
 

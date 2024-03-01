@@ -68,7 +68,12 @@ export default function LoginScreen() {
               position: "relative",
             }}
           >
-            <View style={{ paddingBottom: 50, marginTop: windowWidth > 500 ? 50 : 110 }}>
+            <View
+              style={{
+                paddingBottom: 50,
+                marginTop: windowWidth > 500 ? 50 : 110,
+              }}
+            >
               <Text
                 style={[
                   styles.welText,
