@@ -294,12 +294,6 @@
 
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "./Tabs/Home";
-import Notifications from "./Tabs/Notifications";
-import Profile from "./Tabs/Profile";
-import OrderHistory from "./Tabs/OrderHistory";
-import Cart from "./Tabs/Cart";
-import BottomTabBar from "./Navigations/BottomTabBar";
 import DrawerNavigation from "./Navigations/DrawerNavigation";
 const Stack = createNativeStackNavigator();
 
@@ -312,7 +306,11 @@ const HomeScreen = () => {
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="Profile" component={Profile} /> */}
       {/* <Stack.Screen name="Home" component={BottomTabBar} /> */}
-      <Stack.Screen name="Home" component={DrawerNavigation} options={{ headerShown: false }}/>
+      <Stack.Screen
+        name="Home"
+        component={DrawerNavigation}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

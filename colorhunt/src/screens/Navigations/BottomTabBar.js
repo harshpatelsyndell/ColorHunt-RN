@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Svg, { Path, Rect } from "react-native-svg";
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
@@ -9,6 +9,7 @@ import Notifications from "../Tabs/Notifications";
 import Profile from "../Tabs/Profile";
 import profileImage from "../../../assets/images/profile.png";
 import { useNavigation } from "@react-navigation/native";
+import Wishlist from "../Tabs/Wishlist";
 
 const HomeIcon = (
   <Svg xmlns="http://www.w3.org/2000/svg" width={17} height={19} fill="none">
@@ -200,6 +201,23 @@ const burgerMenuIcon = (
   </Svg>
 );
 
+const backButton = (
+  <Svg
+    width="23"
+    height="15"
+    viewBox="0 0 23 15"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12.7917 7.59103V7.16622C12.7797 5.48142 12.6837 3.9778 12.5037 3.025C12.5037 3.007 12.3117 2.06261 12.1917 1.74821C11.9997 1.29341 11.6516 0.907007 11.2196 0.662207C10.8716 0.488207 10.5115 0.399414 10.1275 0.399414C9.82754 0.413814 9.3356 0.563819 8.9876 0.689819L8.6876 0.802612C6.7556 1.57301 3.04758 4.0918 1.61958 5.6314L1.51162 5.73943L1.05562 6.24341C0.755615 6.62861 0.599609 7.10141 0.599609 7.60901C0.599609 8.06381 0.74358 8.5186 1.01958 8.8858C1.10358 9.0046 1.23562 9.15702 1.35562 9.28662L1.81162 9.76303C3.37162 11.3482 6.75558 13.573 8.51958 14.3098C8.51958 14.3266 9.61154 14.7826 10.1275 14.7994H10.1996C10.9916 14.7994 11.7356 14.3446 12.1196 13.6102C12.2276 13.4086 12.3236 13.015 12.4076 12.6694L12.5396 12.0166C12.6956 10.9678 12.7917 9.35743 12.7917 7.59103ZM20.3996 9.42102C21.3956 9.42102 22.1996 8.60622 22.1996 7.59941C22.1996 6.59381 21.3956 5.77902 20.3996 5.77902L15.9597 6.17141C15.1797 6.17141 14.5436 6.80981 14.5436 7.59941C14.5436 8.38902 15.1797 9.02863 15.9597 9.02863L20.3996 9.42102Z"
+      fill="black"
+    />
+  </Svg>
+);
+
 const TabArr = [
   {
     route: "HomeWelcome",
@@ -310,6 +328,26 @@ const BottomTabBar = ({ route }) => {
                   },
                   headerRight: () => <ProfileIcon />,
                 };
+              } else if (route.name === "Profile") {
+                return {
+                  title: "",
+                  animationEnabled: true,
+                  tabBarButton: (props) => <TabButton {...props} item={item} />,
+                  headerShadowVisible: false,
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("HomeWelcome")}
+                      >
+                        <BackMenu />
+                      </TouchableOpacity>
+                    );
+                  },
+                  headerRight: () => <SaveButton />,
+                  headerStyle: {
+                    backgroundColor: "#212121",
+                  },
+                };
               }
               return {
                 title: "",
@@ -321,12 +359,22 @@ const BottomTabBar = ({ route }) => {
           />
         );
       })}
+      <Tab.Screen
+        name="Wishlist"
+        component={Wishlist}
+        options={{
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
     </Tab.Navigator>
   );
 };
 
 const BurgerMenu = () => {
   return <View style={styles.burgerMenuContainer}>{burgerMenuIcon}</View>;
+};
+const BackMenu = () => {
+  return <View style={styles.backMenuContainer}>{backButton}</View>;
 };
 
 const ProfileIcon = () => {
@@ -340,6 +388,22 @@ const ProfileIcon = () => {
         source={profileImage}
         style={{ width: 35, height: 35, borderRadius: 100 }}
       />
+    </TouchableOpacity>
+  );
+};
+const SaveButton = () => {
+  // const navigation = useNavigation();
+  return (
+    <TouchableOpacity style={styles.SaveButtonContainer}>
+      <Text
+        style={{
+          color: "white",
+          fontFamily: "Glory_600SemiBold",
+          fontSize: 18,
+        }}
+      >
+        SAVE
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -368,7 +432,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  backMenuContainer: {
+    width: 35,
+    height: 35,
+    marginHorizontal: 20,
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   profileIconContainer: {
+    marginHorizontal: 20,
+  },
+  SaveButtonContainer: {
     marginHorizontal: 20,
   },
 });

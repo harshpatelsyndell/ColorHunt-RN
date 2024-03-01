@@ -6,11 +6,14 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import Svg, { Path, Rect } from "react-native-svg";
+import Svg, { Path, Rect, Circle, G, ClipPath, Defs } from "react-native-svg";
 import BottomTabBar from "./BottomTabBar";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import profile1 from "../../../assets/images/profile1.png";
-import { useNavigation } from "@react-navigation/native";
+import Wishlist from "../Tabs/Wishlist";
+import splashh from "../../../assets/splashh.png";
+import { useNavigation, DrawerActions } from "@react-navigation/native";
+import LoginScreen from "../LoginScreen";
 
 const CancelIcon = (
   <Svg
@@ -109,52 +112,197 @@ const notificationIcon = (
   </Svg>
 );
 
+const wishlistIcon = (
+  <Svg
+    width="21"
+    height="20"
+    viewBox="0 0 21 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      d="M10 18C9.84483 18 9.68965 17.9233 9.53448 17.8465C4.10345 14.0864 1.31034 10.5565 1 7.18007V6.18249C1.31034 2.8828 3.48276 1.19458 5.42241 1.04111C7.82759 0.810898 8.99138 1.57827 10 2.57585C11.0086 1.57827 12.25 0.810898 14.5776 1.04111C16.5172 1.19458 18.6897 2.8828 19 6.10576V7.10334C18.7672 10.5565 15.9741 14.0097 10.4655 17.8465C10.3103 17.9233 10.1552 18 10 18Z"
+      fill="white"
+    />
+  </Svg>
+);
+
+const contactUsIcon = (
+  <Svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Circle cx="10" cy="10" r="10" fill="white" />
+    <Path
+      d="M9.125 13.3333H10.875V15H9.125V13.3333ZM10 5C8.06625 5 6.5 6.49167 6.5 8.33333H8.25C8.25 7.41667 9.0375 6.66667 10 6.66667C10.9625 6.66667 11.75 7.41667 11.75 8.33333C11.75 10 9.125 9.79167 9.125 12.5H10.875C10.875 10.625 13.5 10.4167 13.5 8.33333C13.5 6.49167 11.9338 5 10 5Z"
+      fill="#212121"
+    />
+  </Svg>
+);
+
+const aboutUsIcon = (
+  <Svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Circle cx="10" cy="10" r="10" fill="white" />
+    <Path
+      d="M9.89946 3.90405C9.62044 3.90522 9.36444 4.06468 9.18298 4.32623C9.00176 4.58744 8.90388 4.93566 8.90538 5.29377L8.93228 11.7215C8.93377 12.0796 9.03456 12.427 9.21797 12.6867C9.40161 12.9467 9.65893 13.104 9.93795 13.1028C10.217 13.1017 10.473 12.9422 10.6544 12.6807C10.8357 12.4194 10.9335 12.0712 10.932 11.7131L10.9051 5.28541C10.9036 4.9273 10.8029 4.57991 10.6194 4.32022C10.4358 4.0602 10.1785 3.90288 9.89946 3.90405Z"
+      fill="#212121"
+      stroke="#212121"
+      stroke-width="0.2"
+    />
+    <Circle
+      cx="9.90365"
+      cy="15.7028"
+      r="0.999888"
+      transform="rotate(-0.239747 9.90365 15.7028)"
+      fill="#212121"
+      stroke="#212121"
+      stroke-width="0.2"
+    />
+  </Svg>
+);
+
+const logoutIcon = (
+  <Svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <G clip-path="url(#clip0_317_1570)">
+      <Path
+        d="M19.4444 10.409C19.4433 10.4112 19.4424 10.413 19.4416 10.4145L19.3763 10.4798V10.5141C19.3656 10.532 19.3559 10.5526 19.3486 10.5758C19.3397 10.589 19.3274 10.6052 19.3115 10.6238C19.2877 10.6515 19.2633 10.6762 19.2426 10.6968L15.4108 14.4037L15.4054 14.4089L15.4003 14.4144C15.0452 14.8018 14.4183 14.8134 14.0114 14.4066C13.8084 14.2035 13.7096 13.9338 13.7096 13.7083C13.7096 13.4828 13.8084 13.2131 14.0114 13.0101L15.6781 11.3434L16.1049 10.9167H15.5013H5.54297C4.97271 10.9167 4.54297 10.4869 4.54297 9.91667C4.54297 9.3464 4.97271 8.91667 5.54297 8.91667H15.543H16.1465L15.7197 8.48989L14.0531 6.82322L14.0532 6.82306L14.0452 6.81571C13.6578 6.46056 13.6462 5.83361 14.0531 5.42678L14.0532 5.42694L14.0606 5.41893C14.4157 5.03149 15.0427 5.01994 15.4495 5.42678L19.2412 9.21844C19.3073 9.28453 19.3302 9.30877 19.3472 9.33651C19.3547 9.36152 19.365 9.38354 19.3763 9.40258V9.43689L19.4495 9.51011C19.4567 9.51731 19.4624 9.52303 19.4674 9.52809C19.4717 9.54787 19.4773 9.56455 19.4821 9.57737C19.4899 9.59834 19.4993 9.61751 19.5045 9.62783C19.5088 9.65888 19.517 9.6844 19.5237 9.70236C19.5319 9.72412 19.5417 9.74393 19.5467 9.75395L19.5504 9.76897C19.5821 9.89582 19.5821 10.0208 19.5504 10.1477L19.5467 10.1627C19.5417 10.1727 19.5319 10.1925 19.5237 10.2143C19.517 10.2323 19.5088 10.2578 19.5045 10.2888C19.4993 10.2992 19.4899 10.3183 19.4821 10.3393C19.4811 10.3419 19.4801 10.3446 19.4791 10.3475C19.4626 10.3723 19.4521 10.3934 19.4459 10.4059C19.4454 10.407 19.4448 10.4081 19.4444 10.409Z"
+        fill="white"
+        stroke="#212121"
+        stroke-width="0.5"
+      />
+      <Path
+        d="M11.082 12.5007V12.2507H10.832H5.54036C4.30344 12.2507 3.29036 11.2376 3.29036 10.0007C3.29036 8.76372 4.30344 7.75065 5.54036 7.75065H10.832H11.082V7.50065V2.41732C11.082 1.07091 9.9701 -0.0410156 8.6237 -0.0410156H2.41536C1.06896 -0.0410156 -0.0429688 1.07091 -0.0429688 2.41732V17.584C-0.0429688 18.9304 1.06896 20.0423 2.41536 20.0423H8.6237C9.9701 20.0423 11.082 18.9304 11.082 17.584V12.5007Z"
+        fill="white"
+        stroke="white"
+        stroke-width="0.5"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="clip0_317_1570">
+        <Rect width="20" height="20" fill="white" />
+      </ClipPath>
+    </Defs>
+  </Svg>
+);
+
 const Drawer = createDrawerNavigator();
 // {Navigation, ...props}
 function CustomDrawerContent(props) {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   // console.log("Navigation object:", navigation);
   const handleCloseDrawer = () => {
     console.log("Closing drawer...");
-    // navigation.closeDrawer();
+    navigation.dispatch(DrawerActions.closeDrawer());
   };
+
+  // Add this function to handle navigation to the Wishlist screen
+  const handleWishlistPress = () => {
+    navigation.navigate("Wishlist");
+  };
+
+  const handleLogout = () => {
+    navigation.navigate("Login"); // Navigate to the LoginScreen
+  };
+
   return (
-    <DrawerContentScrollView {...props} style={{ backgroundColor: "#212121" }}>
-      <View
-        style={{
-          marginHorizontal: 19,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginVertical: 30,
-        }}
+    <View style={{ flex: 1, backgroundColor: "#212121" }}>
+      <DrawerContentScrollView
+        {...props}
+        style={{ backgroundColor: "#212121" }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <View>
-            <Image source={profile1} style={{ width: 35, height: 35 }} />
+        <View
+          style={{
+            marginHorizontal: 19,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginVertical: 30,
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <View>
+              <Image source={profile1} style={{ width: 35, height: 35 }} />
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Glory_700Bold",
+                  fontSize: 16,
+                }}
+              >
+                Harsh
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text
+          <TouchableOpacity onPress={handleCloseDrawer}>
+            <View
               style={{
-                color: "white",
-                fontFamily: "Glory_700Bold",
-                fontSize: 16,
+                backgroundColor: "white",
+                padding: 10,
+                borderRadius: 100,
               }}
             >
-              Harsh
-            </Text>
-          </View>
+              {CancelIcon}
+            </View>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleCloseDrawer}>
-          <View
-            style={{ backgroundColor: "white", padding: 10, borderRadius: 100 }}
-          >
-            {CancelIcon}
-          </View>
-        </TouchableOpacity>
+        <DrawerItemList {...props} />
+        <DrawerItem
+          label="Wishlist"
+          onPress={handleWishlistPress}
+          icon={() => wishlistIcon}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <DrawerItem
+          label="About Us"
+          // onPress={handleWishlistPress}
+          icon={() => aboutUsIcon}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <DrawerItem
+          label="Contact Us"
+          // onPress={handleWishlistPress}
+          icon={() => contactUsIcon}
+          labelStyle={styles.drawerItemLabel}
+        />
+        <View style={{ marginTop: 20 }}>
+          <DrawerItem
+            label="Logout"
+            component={LoginScreen}
+            onPress={handleLogout}
+            icon={() => logoutIcon}
+            labelStyle={styles.drawerItemLabel}
+          />
+        </View>
+      </DrawerContentScrollView>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "212121",
+          paddingVertical: 10,
+          // height: 170,
+        }}
+      >
+        <Image source={splashh} style={{ width: 161, height: 161 }} />
       </View>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
+    </View>
   );
 }
 
@@ -176,34 +324,65 @@ const DrawerNavigation = () => {
       }}
     >
       <Drawer.Screen
-        name="Home Welcome"
+        name="DrawerHomeWelcome"
         initialParams={{ params: "HomeWelcome" }}
         component={BottomTabBar}
         options={{
           headerShown: false,
-          drawerIcon: () => HomeIcon,
+          drawerItemStyle: { display: "none" },
         }}
       />
       <Drawer.Screen
-        name="Order History"
+        name="DrawerOrderHistory"
         initialParams={{ params: "OrderHistory" }}
         component={BottomTabBar}
-        options={{ headerShown: false, drawerIcon: () => orderhistory }}
+        options={{
+          headerShown: false,
+          drawerIcon: () => orderhistory,
+          drawerLabel: "Order History",
+        }}
       />
       <Drawer.Screen
-        name="Cartss"
+        name="DrawerCart"
         initialParams={{ params: "Cart" }}
         component={BottomTabBar}
-        options={{ headerShown: false, drawerIcon: () => cartIcon }}
+        options={{
+          headerShown: false,
+          drawerIcon: () => cartIcon,
+          drawerLabel: "Cart",
+        }}
       />
+      {/* <Drawer.Screen
+        name="DrawerWishlist"
+        initialParams={{ params: "Wishlist" }}
+        component={BottomTabBar}
+        options={{
+          // headerShown: false,
+          drawerIcon: () => cartIcon,
+          drawerLabel: "Wishlist",
+        }}
+      /> */}
       <Drawer.Screen
-        name="Notificationss"
+        name="DrawerNotifications"
         initialParams={{ params: "Notifications" }}
         component={BottomTabBar}
-        options={{ headerShown: false, drawerIcon: () => notificationIcon }}
+        options={{
+          headerShown: false,
+          drawerIcon: () => notificationIcon,
+          drawerLabel: "Notifications",
+        }}
       />
     </Drawer.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  drawerItemLabel: {
+    marginLeft: -20,
+    fontFamily: "Glory_700Bold",
+    fontSize: 18,
+    color: "#fff",
+  },
+});
 
 export default DrawerNavigation;

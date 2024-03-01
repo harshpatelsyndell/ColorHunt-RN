@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import Svg, { Path, Circle } from "react-native-svg";
 import {
@@ -140,6 +141,7 @@ const renderItemKids = ({ item }) => {
 const Home = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* <ScrollView style={{ flex: 1 }}> */}
       <Text style={{ margin: 20, fontFamily: "Glory_700Bold", fontSize: 25 }}>
         Welcome...
       </Text>
@@ -246,6 +248,7 @@ const Home = () => {
           />
         </View>
       </View>
+      {/* </ScrollView> */}
     </View>
   );
 };
