@@ -23,9 +23,9 @@ import splashh from "../../assets/splashh.png";
 import spiralBottom from "../../assets/images/spiralBottom.png";
 
 export default function VerifyScreen() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const [focusedInput, setFocusedInput] = useState(null);
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(["", "", "", ""]);
   const inputRefs = useRef([]);
 
   const handleOtpChange = (index, value) => {
@@ -71,7 +71,7 @@ export default function VerifyScreen() {
               position: "relative",
             }}
           >
-            <View style={{ paddingBottom: 50, marginTop: 110 }}>
+            <View style={{ paddingBottom: 50, marginTop: 80 }}>
               <Text style={styles.welText}>Welcome!</Text>
               <Text style={styles.LoginText}>Please Login To Continue</Text>
             </View>
@@ -112,12 +112,12 @@ export default function VerifyScreen() {
                     onBlur={() => setFocusedInput(null)}
                     onChangeText={(value) => handleOtpChange(index, value)}
                     onKeyPress={({ nativeEvent }) => {
-                        if (nativeEvent.key === "Backspace") {
-                          handleBackspace(index);
-                        }
-                      }}
+                      if (nativeEvent.key === "Backspace") {
+                        handleBackspace(index);
+                      }
+                    }}
                     value={digit}
-                    returnKeyType={index < otp.length - 1 ? 'next' : 'done'}
+                    returnKeyType={index < otp.length - 1 ? "next" : "done"}
                     onSubmitEditing={() => {
                       if (index < otp.length - 1) {
                         inputRefs.current[index + 1]?.focus();

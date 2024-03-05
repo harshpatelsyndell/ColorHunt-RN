@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
-  Modal,
+  Pressable,
 } from "react-native";
 import Svg, { Path, Circle, Rect } from "react-native-svg";
 import {
@@ -21,6 +21,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Mens from "./Mens";
 import { ProfileIcon } from "../../components/ProfileIcon";
 import { useNavigation } from "@react-navigation/native";
+import FilterModal from "../../components/FilterModal";
+import ProductDetail from "./ProductDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -96,29 +98,6 @@ const backButtonLight = (
   </Svg>
 );
 
-const cancelIcon = (
-  <Svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <Path
-      d="M12.7666 12.668L1.09934 1.00071"
-      stroke="white"
-      stroke-width="2"
-      stroke-linecap="round"
-    />
-    <Path
-      d="M12.7666 1L1.09934 12.6673"
-      stroke="white"
-      stroke-width="2"
-      stroke-linecap="round"
-    />
-  </Svg>
-);
-
 const Home1 = ({ navigation }) => {
   const [filterModel, setFilterModel] = useState(false);
   const closeBottomSheet = () => {
@@ -161,50 +140,17 @@ const Home1 = ({ navigation }) => {
           <TouchableOpacity
             style={{
               width: wp("10%"),
+              alignItems: "flex-end",
             }}
             onPress={openBottomSheet}
           >
             {filterIcon}
           </TouchableOpacity>
         </View>
-        <Modal
-          transparent={true}
-          animationType="slide"
-          visible={filterModel}
-          onRequestClose={closeBottomSheet}
-        >
-          <View style={styles.filterModalContainer}>
-            <View style={styles.filterModal}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontFamily: "Glory_700Bold", fontSize: 24 }}>
-                  Category
-                </Text>
-                <TouchableOpacity onPress={closeBottomSheet}>
-                  <View
-                    style={{
-                      backgroundColor: "#212121",
-                      color: "white",
-                      width: 32,
-                      height: 32,
-                      borderRadius: 100,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {cancelIcon}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Text>range</Text>
-            </View>
-          </View>
-        </Modal>
+        <FilterModal
+          closeBottomSheet={closeBottomSheet}
+          filterModel={filterModel}
+        />
         {/* mensSection    */}
         <View style={{ marginTop: 25, marginHorizontal: 20 }}>
           <View
@@ -220,9 +166,13 @@ const Home1 = ({ navigation }) => {
               </Text>
             </View>
             <View>
-              <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
-                View all
-              </Text>
+              <Pressable
+                onPress={() => navigation.navigate("mens", { category: "All" })}
+              >
+                <Text style={{ fontFamily: "Glory_600SemiBold", fontSize: 12 }}>
+                  View all
+                </Text>
+              </Pressable>
             </View>
           </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -278,6 +228,9 @@ const Home1 = ({ navigation }) => {
             {KidsSection[0].articles.map((item) => (
               <TouchableOpacity
                 key={item.articleNo}
+                onPress={() =>
+                  navigation.navigate("productDetail", { details: item })
+                }
                 style={{ alignItems: "center", marginTop: 17, marginRight: 15 }}
               >
                 <View style={{ width: 155, height: 170, borderRadius: 10 }}>
@@ -412,7 +365,7 @@ const BurgerMenu = () => {
   return <View style={styles.burgerMenuContainer}>{burgerMenuIcon}</View>;
 };
 
-const BackMenuDark = () => {
+export const BackMenuDark = () => {
   return (
     <View style={[styles.backMenuContainer, { backgroundColor: "#212121" }]}>
       {backButtonLight}
@@ -433,6 +386,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+    marginHorizontal: 5,
   },
   burgerMenuContainer: {
     width: 35,
@@ -442,21 +396,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: 5,
-  },
-  filterModalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    paddingHorizontal: 20,
-  },
-  filterModal: {
-    backgroundColor: "white",
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    width: "100%",
-    // alignItems: "center",
   },
 });
 

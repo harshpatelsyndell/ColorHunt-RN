@@ -17,6 +17,7 @@ import Notifications from "../Tabs/Notifications";
 import Profile from "../Tabs/Profile";
 import { useNavigation } from "@react-navigation/native";
 import Wishlist from "../Tabs/Wishlist";
+import ProductDetail from "../Tabs/ProductDetail";
 // import { ProfileIcon } from "../../components/ProfileIcon";
 
 const HomeIcon = (
@@ -327,7 +328,9 @@ const BottomTabBar = ({ route }) => {
           right: 16,
           left: 16,
           borderRadius: 20,
-          ...(["Profile", "Cart"].includes(route.name) && { display: "none" }),
+          ...(["Profile", "Cart", "productDetail"].includes(route.name) && {
+            display: "none",
+          }),
         },
       })}
     >
@@ -410,6 +413,15 @@ const BottomTabBar = ({ route }) => {
         name="Wishlist"
         component={Wishlist}
         options={{
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name="productDetail"
+        component={ProductDetail}
+        options={{
+          title: "",
+          headerShown: false,
           tabBarItemStyle: { display: "none" },
         }}
       />

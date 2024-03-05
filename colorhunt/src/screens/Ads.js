@@ -33,9 +33,7 @@ const FadeInOutImage = ({ source }) => {
   }, [source]); // Reset animation when source changes
 
   return (
-    <Animated.View
-      style={{ opacity, height: hp("98%"), backgroundColor: "plum" }}
-    >
+    <Animated.View style={{ opacity, height: hp("98%") }}>
       <Image
         source={source}
         style={{ width: "100%", height: "100%", resizeMode: "stretch" }}

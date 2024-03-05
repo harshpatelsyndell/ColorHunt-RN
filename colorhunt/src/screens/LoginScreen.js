@@ -71,7 +71,7 @@ export default function LoginScreen() {
             <View
               style={{
                 paddingBottom: 50,
-                marginTop: windowWidth > 500 ? 50 : 110,
+                marginTop: windowWidth > 500 ? 50 : 80,
               }}
             >
               <Text
