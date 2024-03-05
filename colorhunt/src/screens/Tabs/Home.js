@@ -23,6 +23,8 @@ import { ProfileIcon } from "../../components/ProfileIcon";
 import { useNavigation } from "@react-navigation/native";
 import FilterModal from "../../components/FilterModal";
 import ProductDetail from "./ProductDetail";
+import { useSelector, useDispatch } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../../Redux/wishlistReducer";
 
 const Stack = createNativeStackNavigator();
 
@@ -98,6 +100,36 @@ const backButtonLight = (
   </Svg>
 );
 
+const unfillHeartIcon = (
+  <Svg
+    width="21"
+    height="20"
+    viewBox="0 0 21 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      d="M10 18C9.84483 18 9.68966 17.9233 9.53448 17.8465C4.10345 14.0864 1.31034 10.5565 1 7.18007V6.18249C1.31034 2.8828 3.48276 1.19458 5.42241 1.04111C7.82759 0.810898 8.99138 1.57827 10 2.57585C11.0086 1.57827 12.25 0.810898 14.5776 1.04111C16.5172 1.19458 18.6897 2.8828 19 6.10576V7.10334C18.7672 10.5565 15.9741 14.0097 10.4655 17.8465C10.3103 17.9233 10.1552 18 10 18ZM6.19828 2.49911C5.96552 2.49911 5.73276 2.49911 5.5 2.49911C4.18103 2.65259 2.7069 3.80364 2.47414 6.18249V7.0266C2.7069 9.7124 5.18966 12.8586 9.92241 16.1583C14.6552 12.7819 17.1379 9.7124 17.3707 6.94986V6.10576C17.2155 3.80364 15.6638 2.57585 14.3448 2.49911C12.4828 2.34564 11.6293 2.80606 10.5431 4.18733C10.3879 4.3408 10.1552 4.49428 9.92241 4.49428C9.68965 4.49428 9.4569 4.41754 9.30172 4.18733C8.37069 3.03627 7.67241 2.49911 6.19828 2.49911Z"
+      fill="#212121"
+    />
+  </Svg>
+);
+
+const fillHeartIcon = (
+  <Svg
+    width="21"
+    height="20"
+    viewBox="0 0 21 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <Path
+      d="M10 18C9.84483 18 9.68965 17.9233 9.53448 17.8465C4.10345 14.0864 1.31034 10.5565 1 7.18007V6.18249C1.31034 2.8828 3.48276 1.19458 5.42241 1.04111C7.82759 0.810898 8.99138 1.57827 10 2.57585C11.0086 1.57827 12.25 0.810898 14.5776 1.04111C16.5172 1.19458 18.6897 2.8828 19 6.10576V7.10334C18.7672 10.5565 15.9741 14.0097 10.4655 17.8465C10.3103 17.9233 10.1552 18 10 18Z"
+      fill="#DA4A4A"
+    />
+  </Svg>
+);
+
 const Home1 = ({ navigation }) => {
   const [filterModel, setFilterModel] = useState(false);
   const closeBottomSheet = () => {
@@ -106,6 +138,23 @@ const Home1 = ({ navigation }) => {
   const openBottomSheet = () => {
     setFilterModel(true);
   };
+  const cart = useSelector((state) => state.cart.cart);
+  console.log("cart item", cart);
+  // const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state) => state.wishlist.items);
+  console.log("wishlist item", wishlist);
+
+  const toggleWishlist = (item) => {
+    if (
+      wishlist.some((wishlistItem) => wishlistItem.articleNo === item.articleNo)
+    ) {
+      dispatch(removeFromWishlist(item));
+    } else {
+      dispatch(addToWishlist(item));
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView style={{ flex: 1 }}>
@@ -233,12 +282,30 @@ const Home1 = ({ navigation }) => {
                 }
                 style={{ alignItems: "center", marginTop: 17, marginRight: 15 }}
               >
-                <View style={{ width: 155, height: 170, borderRadius: 10 }}>
+                <View
+                  style={{
+                    width: 155,
+                    height: 170,
+                    borderRadius: 10,
+                    position: "relative",
+                  }}
+                >
                   <Image
                     source={item.imageurl}
                     resizeMode="cover"
                     style={{ width: 155, height: 170, borderRadius: 10 }}
                   />
+                  <Pressable
+                    onPress={() => toggleWishlist(item)}
+                    style={{ position: "absolute", right: 10, top: 10 }}
+                  >
+                    {wishlist.some(
+                      (wishlistItem) =>
+                        wishlistItem.articleNo === item.articleNo
+                    )
+                      ? fillHeartIcon
+                      : unfillHeartIcon}
+                  </Pressable>
                 </View>
                 <View style={{ marginTop: 5 }}>
                   <Text

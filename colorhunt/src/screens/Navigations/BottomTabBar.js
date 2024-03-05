@@ -398,6 +398,28 @@ const BottomTabBar = ({ route }) => {
                     fontSize: 25,
                   },
                 };
+              } else if (route.name === "Cart") {
+                return {
+                  title: "Cart",
+                  animationEnabled: true,
+                  tabBarButton: (props) => <TabButton {...props} item={item} />,
+                  headerShadowVisible: false,
+                  headerLeft: () => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("HomeWelcome")}
+                      >
+                        <BackMenuDark />
+                      </TouchableOpacity>
+                    );
+                  },
+                  // headerRight: () => <SaveButton />,
+                  headerTitleAlign: "center",
+                  headerTitleStyle: {
+                    fontFamily: "Glory_700Bold",
+                    fontSize: 25,
+                  },
+                };
               }
               return {
                 title: "",
@@ -414,6 +436,24 @@ const BottomTabBar = ({ route }) => {
         component={Wishlist}
         options={{
           tabBarItemStyle: { display: "none" },
+          title: "Wishlist",
+          animationEnabled: true,
+          headerShadowVisible: false,
+          headerLeft: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("HomeWelcome")}
+              >
+                <BackMenuDark />
+              </TouchableOpacity>
+            );
+          },
+          // headerRight: () => <SaveButton />,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontFamily: "Glory_700Bold",
+            fontSize: 25,
+          },
         }}
       />
       <Tab.Screen

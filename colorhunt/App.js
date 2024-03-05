@@ -16,6 +16,8 @@ import LoginScreen from "./src/screens/LoginScreen";
 import VerifyScreen from "./src/screens/VerifyScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import Ads from "./src/screens/Ads";
+import { Provider } from "react-redux";
+import store from "./src/store";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,30 +37,32 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Verify"
-          component={VerifyScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Ads"
-          component={Ads}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Verify"
+            component={VerifyScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Ads"
+            component={Ads}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

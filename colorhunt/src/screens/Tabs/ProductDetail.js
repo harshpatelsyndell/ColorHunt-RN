@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   StatusBar,
@@ -20,6 +20,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../Redux/CartReducer";
 
 const cartIcon = (
   <Svg
@@ -104,8 +107,82 @@ const addIcon = (
 
 const ProductDetail = ({ route }) => {
   const productDetail = route.params;
-  console.log(productDetail);
+  // console.log(productDetail);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cart);
+
+  const [quantities, setQuantities] = useState({
+    color1: 0,
+    color2: 0,
+    color3: 0,
+    color4: 0,
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const initialQuantities = cartItems.find(
+        (item) => item.articleNo === productDetail.details.articleNo
+      )?.quantities || {
+        color1: 0,
+        color2: 0,
+        color3: 0,
+        color4: 0,
+      };
+      setQuantities(initialQuantities);
+    }, [cartItems, productDetail])
+  );
+
+  const incrementQuantity = (color) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [color]: prevQuantities[color] + 1,
+    }));
+  };
+
+  const decrementQuantity = (color) => {
+    if (quantities[color] > 0) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [color]: prevQuantities[color] - 1,
+      }));
+    }
+  };
+
+  const totalQuantity =
+    quantities.color1 +
+    quantities.color2 +
+    quantities.color3 +
+    quantities.color4;
+
+  const handleAddToCart = () => {
+    const totalQuantity =
+      quantities.color1 +
+      quantities.color2 +
+      quantities.color3 +
+      quantities.color4;
+
+    if (totalQuantity > 0) {
+      dispatch(
+        addToCart({
+          articleNo: productDetail.details.articleNo,
+          imageurl: productDetail.details.imageurl,
+          type: productDetail.details.type,
+          price: productDetail.details.price,
+          // details: productDetail.details,
+          quantities: { ...quantities },
+          totalPrice:
+            productDetail.details.price *
+            (quantities.color1 +
+              quantities.color2 +
+              quantities.color3 +
+              quantities.color4),
+        })
+      );
+    }
+    navigation.navigate("Cart");
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -393,7 +470,12 @@ const ProductDetail = ({ route }) => {
                   Add Qty.
                 </Text>
                 <View style={styles.qtnbtn}>
-                  <View style={styles.addButton}>{minusIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => decrementQuantity("color1")}
+                  >
+                    {minusIcon}
+                  </Pressable>
                   <View>
                     <Text
                       style={{
@@ -402,13 +484,23 @@ const ProductDetail = ({ route }) => {
                         fontFamily: "Glory_600SemiBold",
                       }}
                     >
-                      0
+                      {quantities.color1}
                     </Text>
                   </View>
-                  <View style={styles.addButton}>{addIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => incrementQuantity("color1")}
+                  >
+                    {addIcon}
+                  </Pressable>
                 </View>
                 <View style={styles.qtnbtn}>
-                  <View style={styles.addButton}>{minusIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => decrementQuantity("color2")}
+                  >
+                    {minusIcon}
+                  </Pressable>
                   <View>
                     <Text
                       style={{
@@ -417,13 +509,23 @@ const ProductDetail = ({ route }) => {
                         fontFamily: "Glory_600SemiBold",
                       }}
                     >
-                      0
+                      {quantities.color2}
                     </Text>
                   </View>
-                  <View style={styles.addButton}>{addIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => incrementQuantity("color2")}
+                  >
+                    {addIcon}
+                  </Pressable>
                 </View>
                 <View style={styles.qtnbtn}>
-                  <View style={styles.addButton}>{minusIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => decrementQuantity("color3")}
+                  >
+                    {minusIcon}
+                  </Pressable>
                   <View>
                     <Text
                       style={{
@@ -432,13 +534,23 @@ const ProductDetail = ({ route }) => {
                         fontFamily: "Glory_600SemiBold",
                       }}
                     >
-                      0
+                      {quantities.color3}
                     </Text>
                   </View>
-                  <View style={styles.addButton}>{addIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => incrementQuantity("color3")}
+                  >
+                    {addIcon}
+                  </Pressable>
                 </View>
                 <View style={styles.qtnbtn}>
-                  <View style={styles.addButton}>{minusIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => decrementQuantity("color4")}
+                  >
+                    {minusIcon}
+                  </Pressable>
                   <View>
                     <Text
                       style={{
@@ -447,10 +559,15 @@ const ProductDetail = ({ route }) => {
                         fontFamily: "Glory_600SemiBold",
                       }}
                     >
-                      0
+                      {quantities.color4}
                     </Text>
                   </View>
-                  <View style={styles.addButton}>{addIcon}</View>
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() => incrementQuantity("color4")}
+                  >
+                    {addIcon}
+                  </Pressable>
                 </View>
               </View>
             </View>
@@ -546,18 +663,23 @@ const ProductDetail = ({ route }) => {
             Total Price
           </Text>
           <Text style={{ fontFamily: "Glory_700Bold", fontSize: 18 }}>
-            $000.00
+            {productDetail.details.price *
+              (quantities.color1 +
+                quantities.color2 +
+                quantities.color3 +
+                quantities.color4)}
           </Text>
         </View>
         <Pressable
           style={{
-            backgroundColor: "#212121",
+            backgroundColor: totalQuantity === 0 ? "#777" : "#212121",
             width: 208,
             height: 50,
             borderRadius: 12,
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={totalQuantity === 0 ? null : handleAddToCart}
         >
           <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}>
             <View>{cartIcon}</View>

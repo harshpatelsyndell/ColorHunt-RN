@@ -69,6 +69,7 @@ const Profile = () => {
       <View
         // entering={SlideInUp}
         // exiting={SlideInDown}
+
         style={{ flex: 1 }}
       >
         <ScrollView style={{ flex: 1 }}>
